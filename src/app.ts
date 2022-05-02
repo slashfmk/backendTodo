@@ -14,12 +14,12 @@ app.use(bodyParser.json());
 
 app.use(
   cors({
-   origin: "*",
-      // origin: [
-      //     'http://localhost:3000',
-      //     'https://localhost:3000',
-      //     'https://www.mywebsite.com'
-      // ],
+    origin: "*",
+    // origin: [
+    //     'http://localhost:3000',
+    //     'https://localhost:3000',
+    //     'https://www.mywebsite.com'
+    // ],
     method: ["POST", "PUT", "DELETE", "GET", "PATCH"],
     credentials: true,
   })
