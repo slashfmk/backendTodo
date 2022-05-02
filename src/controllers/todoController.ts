@@ -4,10 +4,6 @@ import { FieldInfo, MysqlError } from "mysql";
 
 const db = require("../database/db_config");
 
-const fs = require("fs");
-const util = require("util");
-const unlinkFile = util.promisify(fs.unlink);
-
 // TODO new todo
 export const addTodo = async (
   req: express.Request,
@@ -22,7 +18,7 @@ export const addTodo = async (
 
   try {
     //@ts-ignore
-    let sql = `insert into todo (title, description, done, date) values (?, ?, ?, ?)`;
+    let sql = `insert into todo (title, description, done) values (?, ?, ?)`;
 
     db.query(
       sql,
@@ -32,11 +28,9 @@ export const addTodo = async (
         res.status(200).json({
           message: "todo added successfully!",
         });
-        return next();
-      }
-    );
 
-      db.release();
+        return next();
+      });
 
   } catch (e) {
     console.log(e);
@@ -56,10 +50,9 @@ export const getAllTodos = (
     db.query(sql, (error: MysqlError, results: any, fields: FieldInfo[]) => {
       if (error) return next(error.message);
       res.status(200).json(results);
+
       next();
     });
-
-      db.release();
 
   } catch (e) {
     console.log(e);
@@ -90,8 +83,6 @@ export const getSpecificTodo = (
       }
     );
 
-      db.release();
-
   } catch (e) {
     console.log(e);
     next(e);
@@ -121,8 +112,6 @@ export const deleteTodo = async (
         next();
       }
     );
-
-      db.release();
 
   } catch (e) {
     console.log(e);
