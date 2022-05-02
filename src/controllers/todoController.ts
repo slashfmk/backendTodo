@@ -41,14 +41,17 @@ export const getAllTodos = (req: express.Request, res: express.Response, next: e
 
     let sql = `select * from todo`;
 
-    db.query(sql, (error: MysqlError, results: any, fields: FieldInfo[]) => {
-        if (error) return next(error.message);
-        res.status(200).json(results);
-        next();
-    });
-
+    try {
+        db.query(sql, (error: MysqlError, results: any, fields: FieldInfo[]) => {
+            if (error) return next(error.message);
+            res.status(200).json(results);
+            next();
+        });
+    } catch (e) {
+        console.log(e);
+        next(e);
+    }
 }
-
 
 // TODO get a specific todo
 export const getSpecificTodo = (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -57,13 +60,18 @@ export const getSpecificTodo = (req: express.Request, res: express.Response, nex
 
     let sql = `select * from todo where id =?`;
 
-    db.query(sql, [key], (error: MysqlError, results: any, fields: FieldInfo[]) => {
-        if (error) return next(error.message);
-        res.status(200).json({
-            results
+    try {
+        db.query(sql, [key], (error: MysqlError, results: any, fields: FieldInfo[]) => {
+            if (error) return next(error.message);
+            res.status(200).json({
+                results
+            });
+            next();
         });
-        next();
-    });
+    } catch (e) {
+        console.log(e);
+        next(e);
+    }
 }
 
 // TODO delete todo
@@ -83,6 +91,7 @@ export const deleteTodo = async (req: express.Request, res: express.Response, ne
             next();
         });
     } catch (e) {
+        console.log(e);
         next(e);
     }
 
